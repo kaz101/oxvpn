@@ -3,8 +3,11 @@
 import subprocess
 import PyQt5 as q
 from PyQt5.QtWidgets import  *
+from PyQt5.QtGui import QIcon
+import os
+from os import path
 
-
+os.chdir(path.dirname(__file__))
 def disconnect():
     subprocess.run(['expressvpn','disconnect'])
     statuslabel.setText(getstatus())
@@ -31,6 +34,16 @@ def listservers():
 def chooseserver(list,index):
     choice = list[index]
     connect(choice)
+
+def set_toggles(toggle):
+    status = subprocess.run(['expressvpn','preferences',toggle],capture_output=True,text=True)
+    print(type(status.stdout))
+    if status.stdout.split()[0] == 'default' or status.stdout.split()[0] == 'true' :
+        status = True
+    else:
+        status = False
+    print(status)
+    return status
 
 def getstatus():
     status = subprocess.run(['expressvpn','status'],capture_output=True,text=True)
@@ -83,6 +96,7 @@ app = QApplication([])
 mainwindow = QWidget()
 #mainwindow.setGeometry(400,200,800,500)
 mainwindow.setWindowTitle('OXvpn')
+mainwindow.setWindowIcon(QIcon('ox.png'))
 
 #Configure the layout
 
@@ -98,15 +112,17 @@ connectbutton = QPushButton('Connect')
 connectbutton.clicked.connect(lambda: chooseserver(codelist,serverlistbox.currentRow()))
 statuslabel = QLabel(getstatus())
 autoconnect = QCheckBox('Auto Connect')
+autoconnect.setChecked(set_toggles('auto_connect'))
 networklockbox = QCheckBox('Network lock')
+networklockbox.setChecked(set_toggles('network_lock'))
 notifications = QCheckBox('Notifications')
+notifications.setChecked(set_toggles('desktop_notifications'))
 ipv6 = QCheckBox('Disable ipv6')
+ipv6.setChecked(set_toggles('disable_ipv6'))
 forcevpndns = QCheckBox('Force vpn dns')
+forcevpndns.setChecked(set_toggles('force_vpn_dns'))
 diagnostics = QCheckBox('Diagnostics')
-
-
-networklockbox.setChecked(True)
-print(networklockbox.isChecked())
+diagnostics.setChecked(set_toggles('send_diagnostics'))
 
 serverlist = listservers()
 layout.addWidget(serverlistbox,0,1,6,10)
@@ -131,7 +147,7 @@ for i in range(len(serverlist)-1):
 selection = serverlistbox.selectedItems()
 mainwindow.setLayout(layout)
 mainwindow.show()
-
+set_toggles('network_lock')
 
 
 
