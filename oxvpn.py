@@ -14,12 +14,12 @@ def disconnect():
 
 def connect(server = 'smart'):
     disconnect()
-    networklock(networklockbox.isChecked())
-    show_notifications(notifications.isChecked())
-    auto_connect(autoconnect.isChecked())
-    disable_ipv6(ipv6.isChecked())
-    send_diagnostics(diagnostics.isChecked())
-    force_dns(forcevpndns.isChecked())
+    set_prefs(networklockbox.isChecked(),'network_lock')
+    set_prefs(notifications.isChecked(),'desktop_notifications')
+    set_prefs(autoconnect.isChecked(),'auto_connect')
+    set_prefs(ipv6.isChecked(),'disable_ipv6')
+    set_prefs(diagnostics.isChecked(),'send_diagnostics')
+    set_prefs(forcevpndns.isChecked(),'force_vpn_dns')
 
     subprocess.run(['expressvpn','connect',server])
     statuslabel.setText(getstatus())
@@ -37,12 +37,10 @@ def chooseserver(list,index):
 
 def set_toggles(toggle):
     status = subprocess.run(['expressvpn','preferences',toggle],capture_output=True,text=True)
-    print(type(status.stdout))
     if status.stdout.split()[0] == 'default' or status.stdout.split()[0] == 'true' :
         status = True
     else:
         status = False
-    print(status)
     return status
 
 def getstatus():
@@ -54,37 +52,11 @@ def getstatus():
         connection = ""
         return 'Connected to ' + connection.join(statuslist[2:5])
 
-def networklock(toggle):
+def set_prefs(toggle,checkbox):
     if toggle == True:
-        subprocess.run(['expressvpn','preferences','set','network_lock','on'])
+        subprocess.run(['expressvpn','preferences','set',checkbox,'on'])
     else:
-        subprocess.run(['expressvpn','preferences','set','network_lock','off'])
-def show_notifications(toggle):
-    if toggle == True:
-        subprocess.run(['expressvpn','preferences','set','desktop_notifications','on'])
-    else:
-        subprocess.run(['expressvpn','preferences','set','desktop_notifications','off'])
-
-def disable_ipv6(toggle):
-    if toggle == True:
-        subprocess.run(['expressvpn','preferences','set','disable_ipv6','on'])
-    else:
-        subprocess.run(['expressvpn','preferences','set','disable_ipv6','off'])
-def force_dns(toggle):
-    if toggle == True:
-        subprocess.run(['expressvpn','preferences','set','force_vpn_dns','on'])
-    else:
-        subprocess.run(['expressvpn','preferences','set','force_vpn_dns','off'])
-def send_diagnostics(toggle):
-    if toggle == True:
-        subprocess.run(['expressvpn','preferences','set','send_diagnostics','on'])
-    else:
-        subprocess.run(['expressvpn','preferences','set','send_diagnostics','off'])
-def auto_connect(toggle):
-    if toggle == True:
-        subprocess.run(['expressvpn','preferences','set','auto_connect','on'])
-    else:
-        subprocess.run(['expressvpn','preferences','set','auto_connect','off'])
+        subprocess.run(['expressvpn','preferences','set',checkbox,'off'])
 
 
 #Start of the GUI
@@ -101,11 +73,7 @@ mainwindow.setWindowIcon(QIcon('ox.png'))
 #Configure the layout
 
 layout = QGridLayout()
-
-
-
 serverlistbox = QListWidget()
-
 disconnectbutton = QPushButton('Disconnect')
 disconnectbutton.clicked.connect(lambda:disconnect())
 connectbutton = QPushButton('Connect')
