@@ -1,0 +1,95 @@
+# -*- coding: utf-8 -*-
+
+# Form implementation generated from reading ui file 'oxvpn.ui'
+#
+# Created by: PyQt5 UI code generator 5.14.1
+#
+# WARNING! All changes made in this file will be lost!
+
+
+from PyQt5 import QtCore, QtGui, QtWidgets
+
+
+class Ui_main_window(object):
+    def setupUi(self, main_window):
+        main_window.setObjectName("main_window")
+        main_window.resize(820, 427)
+        main_window.setFocusPolicy(QtCore.Qt.WheelFocus)
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap("ox.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        main_window.setWindowIcon(icon)
+        self.centralwidget = QtWidgets.QWidget(main_window)
+        self.centralwidget.setObjectName("centralwidget")
+        self.verticalLayoutWidget = QtWidgets.QWidget(self.centralwidget)
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(10, 10, 160, 291))
+        self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
+        self.verticalLayout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
+        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.auto_connect_box = QtWidgets.QCheckBox(self.verticalLayoutWidget)
+        self.auto_connect_box.setObjectName("auto_connect_box")
+        self.verticalLayout.addWidget(self.auto_connect_box)
+        self.network_lock_box = QtWidgets.QCheckBox(self.verticalLayoutWidget)
+        self.network_lock_box.setObjectName("network_lock_box")
+        self.verticalLayout.addWidget(self.network_lock_box)
+        self.notifications_box = QtWidgets.QCheckBox(self.verticalLayoutWidget)
+        self.notifications_box.setObjectName("notifications_box")
+        self.verticalLayout.addWidget(self.notifications_box)
+        self.ipv6_box = QtWidgets.QCheckBox(self.verticalLayoutWidget)
+        self.ipv6_box.setObjectName("ipv6_box")
+        self.verticalLayout.addWidget(self.ipv6_box)
+        self.force_vpn_box = QtWidgets.QCheckBox(self.verticalLayoutWidget)
+        self.force_vpn_box.setObjectName("force_vpn_box")
+        self.verticalLayout.addWidget(self.force_vpn_box)
+        self.diagnostics_box = QtWidgets.QCheckBox(self.verticalLayoutWidget)
+        self.diagnostics_box.setObjectName("diagnostics_box")
+        self.verticalLayout.addWidget(self.diagnostics_box)
+        self.horizontalLayoutWidget = QtWidgets.QWidget(self.centralwidget)
+        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(-160, 310, 961, 80))
+        self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
+        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.protocol_label = QtWidgets.QLabel(self.horizontalLayoutWidget)
+        self.protocol_label.setObjectName("protocol_label")
+        self.horizontalLayout.addWidget(self.protocol_label)
+        self.protocol_combobox = QtWidgets.QComboBox(self.horizontalLayoutWidget)
+        self.protocol_combobox.setObjectName("protocol_combobox")
+        self.horizontalLayout.addWidget(self.protocol_combobox)
+        self.disconnect_button = QtWidgets.QPushButton(self.horizontalLayoutWidget)
+        self.disconnect_button.setObjectName("disconnect_button")
+        self.horizontalLayout.addWidget(self.disconnect_button)
+        self.connect_button = QtWidgets.QPushButton(self.horizontalLayoutWidget)
+        self.connect_button.setObjectName("connect_button")
+        self.horizontalLayout.addWidget(self.connect_button)
+        self.gridLayoutWidget = QtWidgets.QWidget(self.centralwidget)
+        self.gridLayoutWidget.setGeometry(QtCore.QRect(189, 9, 611, 291))
+        self.gridLayoutWidget.setObjectName("gridLayoutWidget")
+        self.gridLayout = QtWidgets.QGridLayout(self.gridLayoutWidget)
+        self.gridLayout.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout.setObjectName("gridLayout")
+        self.server_list_box = QtWidgets.QListWidget(self.gridLayoutWidget)
+        self.server_list_box.setResizeMode(QtWidgets.QListView.Adjust)
+        self.server_list_box.setObjectName("server_list_box")
+        self.gridLayout.addWidget(self.server_list_box, 0, 0, 1, 1)
+        self.status_label = QtWidgets.QLabel(self.centralwidget)
+        self.status_label.setGeometry(QtCore.QRect(10, 390, 791, 20))
+        self.status_label.setText("")
+        self.status_label.setObjectName("status_label")
+        main_window.setCentralWidget(self.centralwidget)
+
+        self.retranslateUi(main_window)
+        QtCore.QMetaObject.connectSlotsByName(main_window)
+
+    def retranslateUi(self, main_window):
+        _translate = QtCore.QCoreApplication.translate
+        main_window.setWindowTitle(_translate("main_window", "OxVpn"))
+        self.auto_connect_box.setText(_translate("main_window", "Auto Connect"))
+        self.network_lock_box.setText(_translate("main_window", "Network Lock"))
+        self.notifications_box.setText(_translate("main_window", "Notifications"))
+        self.ipv6_box.setText(_translate("main_window", "Disable ipv6"))
+        self.force_vpn_box.setText(_translate("main_window", "Force VPN DNS"))
+        self.diagnostics_box.setText(_translate("main_window", "Send Diagnostics"))
+        self.protocol_label.setText(_translate("main_window", "<html><head/><body><p align=\"right\"><span style=\" font-weight:600;\">Protocol</span></p></body></html>"))
+        self.disconnect_button.setText(_translate("main_window", "Disconnect"))
+        self.connect_button.setText(_translate("main_window", "Connect"))
