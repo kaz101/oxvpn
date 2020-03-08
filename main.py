@@ -5,6 +5,7 @@ from PyQt5 import QtCore,QtGui,QtWidgets
 from PyQt5.QtWidgets import QApplication
 import mainwindow
 import subprocess
+import time
 
 class Oxvpn(QtWidgets.QMainWindow, mainwindow.Ui_main_window):
     def __init__(self, parent=None):
@@ -17,8 +18,8 @@ class Oxvpn(QtWidgets.QMainWindow, mainwindow.Ui_main_window):
         self.force_vpn_box.setChecked(get_toggles('force_vpn_dns'))
         self.diagnostics_box.setChecked(get_toggles('send_diagnostics'))
         self.serverlist = listservers()
-        self.protocol_list = ['Auto','UDP','TCP']
         
+        self.protocol_list = ['Auto','UDP','TCP']
         for i in self.protocol_list:
             self.protocol_combobox.addItem(i)
         
@@ -32,7 +33,7 @@ class Oxvpn(QtWidgets.QMainWindow, mainwindow.Ui_main_window):
         self.connect_button.clicked.connect(lambda: self.chooseserver(self.codelist,self.server_list_box.currentRow()))
         self.disconnect_button.clicked.connect(lambda:self.disconnect())
         self.status_label.setText(getstatus())
-        self.protocol_combobox.setCurrentIndex(self.get_protocol())
+        self.protocol_combobox.setCurrentIndex(get_protocol())
 
     def connect(self,server = 'smart'):
         self.disconnect()
@@ -54,15 +55,15 @@ class Oxvpn(QtWidgets.QMainWindow, mainwindow.Ui_main_window):
         subprocess.run(['expressvpn','disconnect'])
         self.status_label.setText(getstatus())
         
-    def get_protocol(self):
-        self.current_protocol = subprocess.run(['expressvpn','protocol'],capture_output=True,text=True)
-        print(self.current_protocol.stdout)
-        if self.current_protocol.stdout.strip() == 'auto':
-            return 0
-        elif self.current_protocol.stdout.strip() == 'udp':
-            return 1
-        elif self.current_protocol.stdout.strip() == 'tcp':
-            return 2
+def get_protocol():
+    current_protocol = subprocess.run(['expressvpn','protocol'],capture_output=True,text=True)
+    print(current_protocol.stdout)
+    if current_protocol.stdout.strip() == 'auto':
+        return 0
+    elif current_protocol.stdout.strip() == 'udp':
+        return 1
+    elif current_protocol.stdout.strip() == 'tcp':
+        return 2
 
 
 
@@ -77,9 +78,6 @@ def getstatus():
         print('Connected to ' + connection.join(statuslist[2:5]))
         return 'Connected to ' + connection.join(statuslist[2:5])
 
-
-
-
 def listservers():
     servers = subprocess.run(['expressvpn','list','all'],capture_output=True,text=True)
     serverlist = servers.stdout.split('\n')
@@ -93,7 +91,6 @@ def set_prefs(toggle,checkbox):
     else:
         subprocess.run(['expressvpn','preferences','set',checkbox,'off'])
 
-
 def get_toggles(toggle):
     status = subprocess.run(['expressvpn','preferences',toggle],capture_output=True,text=True)
     if status.stdout.split()[0] == 'default' or status.stdout.split()[0] == 'true' :
@@ -102,9 +99,14 @@ def get_toggles(toggle):
         status = False
     return status
    
-
 def main():
     app = QApplication(sys.argv)
+    servicerunning = subprocess.run(['expressvpn','status'],capture_output=True,text=True)
+    print(servicerunning.stderr)
+    if 'Cannot' in servicerunning.stderr:
+        print('express vpn service not started, Trying to start it now.')
+        subprocess.run(['systemctl','start','expressvpn'])
+        time.sleep(5)        
     window = Oxvpn()
     window.show()
     app.exec_()
